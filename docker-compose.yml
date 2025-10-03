@@ -9,7 +9,7 @@ services:
     environment:
       - DISPLAY=$CONTAINER_DISPLAY
       - QT_X11_NO_MITSHM=1
-      - XAUTHORITY=/home/rosuser/.Xauthority
+      # - XAUTHORITY=/home/rosuser/.Xauthority
     
     deploy:
       resources:
@@ -25,8 +25,8 @@ services:
     volumes:
       - .:/home/rosuser/repo
       - ${DATASET}:/home/rosuser/repo/dataset:rw
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ${HOME}/.Xauthority:/home/rosuser/.Xauthority:rw
+      # - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # - ${HOME}/.Xauthority:/home/rosuser/.Xauthority:rw
     
     command: /bin/bash
     stdin_open: true

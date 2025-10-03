@@ -171,3 +171,13 @@ This template includes NVIDIA GPU support. Ensure you have:
 
 1. NVIDIA drivers installed on host (with cuda >= 12.4)
 2. NVIDIA Container Toolkit configured
+
+## Testing the environment
+
+You are provided with a python script called `gpu_X11fw_test.py`. Just run it with your container running to test
+if everything is working. You should see a message like this:
+```
+PyTorch version: 2.8.0+cu128
+CUDA available: True
+```
+and also a figure created with matplotlib showing a sinusoidal plot.

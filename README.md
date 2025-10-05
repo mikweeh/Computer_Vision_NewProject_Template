@@ -40,26 +40,47 @@ cd my-cv-project
 
 ### 2. Initialize Project
 
-Run the initialization script to set up your project:
+1. Convert the `env.template` file into your `.env` file with your project settings.
+Configure your `.env` file as described in the section `3. Configure Environment:`
 
-```
-chmod +x scripts/init-project.sh
-./scripts/init-project.sh
-```
+2. Create a void `dataset` folder at the main folder of the repo (at the same level as `src/`)
+
+3. Add your dependencies to requirements.txt
+
+4. Open a terminal in the current folder and type `docker compose up -d`.
 
 ### 3. Configure Environment
 
 Edit the `.env` file with your project-specific settings:
 
 ```
-PROJECT_NAME=my-cv-project
-CONTAINER_DISPLAY=:1
-DATASET=/path/to/your/dataset
+# Name of the project. It is also used for the prefix of the container
+PROJECT_NAME = MySuperProject
+
+# X11 display for GUI. You can use :0 or :1 for local. You can also use
+# IP_ADDR:PORT if connected remotely via ssh
+CONTAINER_DISPLAY = :1
+
+# Path to the dataset at the host
+DATASET = /path/to/your/dataset/at/host
+
 # Optionals:
-DEBUG_PORT=5678
-UID=1000
-GID=1000
+# Debug port. Default 5678
+DEBUG_PORT = 5678
+
+# User ID and group ID
+UID = 1000
+GID = 1000
 ```
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PROJECT_NAME` | Container name prefix | `MySuperProject` |
+| `CONTAINER_DISPLAY` | X11 display for GUI | `:1` |
+| `DEBUG_PORT` | Remote debugging port | `5678` |
+| `DATASET` | Path to dataset directory | `/path/to/dataset` |
+| `UID` | User ID | `1000` |
+| `GID` | Group ID | `1000` |
 
 ### 4. Add Dependencies
 
@@ -69,7 +90,7 @@ Update `requirements.txt` with your project dependencies:
 tensorflow==2.13.0
 ```
 
-but take into account that the base image already has a lot of packages installed
+but keep in mind that the base image already has a lot of packages installed
 (ultralytics, open-cv, pillow...). Check [mikweeh/py311_cu124_dockerized_development_environment](https://github.com/mikweeh/py311_cu124_dockerized_development_environment) to see the full
 list of packages installed.
 
@@ -79,29 +100,28 @@ list of packages installed.
 **Build and start the development environment**
 
 ```
-docker-compose up -d
+docker compose up -d
 ```
 
 Also you can force rebuild with
 ```
 docker compose up --build -d
-docker-compose up -d
 ```
 
 Or even force build without using cache
 ```
 docker compose build --no-cache
-docker-compose up -d
+docker compose up -d
 ```
 
 **Access the running container**
 
 ```
-docker-compose exec dev_service bash
+docker compose exec dev_service bash
 ```
 
 But I recommend you use VSCode or Cursor with DevContainers and select the
-option "_Attach to running contaienr_"
+option "_Attach to running container_"
 
 **Finish session**
 
@@ -121,10 +141,9 @@ your-project/
 ├── docker-compose.yml  # Service orchestration
 ├── .env                # Environment variables
 ├── requirements.txt    # Python dependencies
-├── scripts/
-│ └── init-project.sh   # Project initialization
 ├── src/                # Source code directory
-├── dataset             # Dataset files (automatically mapped via .env)
+├── dataset/            # Empty folder outside the container. Dataset files
+|                       # (automatically mapped via .env) inside the container
 ├── .gitignore          # Git ignore rules
 └── README.md           # This file
 ```
@@ -133,8 +152,8 @@ your-project/
 
 ### Starting Development
 
-1. Start the container: `docker-compose up -d`
-2. Access container shell: `docker-compose exec dev_service bash` or "_Attach to running container_"
+1. Start the container: `docker compose up -d`
+2. Access container shell: `docker compose exec dev_service bash` or "_Attach to running container_"
 3. Navigate to project main folder: `cd /home/rosuser/repo`
 4. Start coding in the `src/` directory
 
@@ -146,20 +165,19 @@ The container exposes port 5678 for remote debugging. Configure your IDE to conn
 
 Mount your datasets using the `DATASET` environment variable. The container will mount this path to `/home/rosuser/repo/dataset`.
 
-## Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `PROJECT_NAME` | Container name prefix | `MySuperProject` |
-| `CONTAINER_DISPLAY` | X11 display for GUI | `:1` |
-| `DEBUG_PORT` | Remote debugging port | `5678` |
-| `DATASET` | Path to dataset directory | `/path/to/dataset` |
-| `UID` | User ID | `1000` |
-| `GID` | Group ID | `1000` |
-
 ## GPU Support
 
 This template includes NVIDIA GPU support. Ensure you have:
 
 1. NVIDIA drivers installed on host (with cuda >= 12.4)
 2. NVIDIA Container Toolkit configured
+
+## Testing the environment
+
+You are provided with a python script called `gpu_X11fw_test.py`. Just run it with your container running to test
+if everything is working. You should see a message like this:
+```
+PyTorch version: 2.8.0+cu128
+CUDA available: True
+```
+and also a figure created with matplotlib showing a sinusoidal plot.

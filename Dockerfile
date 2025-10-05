@@ -12,5 +12,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Switch back to rosuser (from the base image)
 USER rosuser
 
-# Copy project source code
+# Copy project source code (and any other sources for production)
 COPY ./src ./src

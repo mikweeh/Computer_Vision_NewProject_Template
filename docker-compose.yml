@@ -25,10 +25,10 @@ services:
       - "${DEBUG_PORT:-5678}:5678"
     
     volumes:
-      - .:/home/rosuser/repo
+      - .:/home/rosuser/repo:rw
       - ${DATASET}:/home/rosuser/repo/dataset:rw
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ${XAUTHORITY}:/home/rosuser/.Xauthority:rw  # X11 auth (optional)
+      - ${XAUTHORITY:-/run/user/1000/gdm/Xauthority}:/home/rosuser/.Xauthority:rw  # X11 auth (optional)
     
     command: /bin/bash
     stdin_open: true

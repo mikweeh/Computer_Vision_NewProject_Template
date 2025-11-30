@@ -71,6 +71,9 @@ DEBUG_PORT = 5678
 # User ID and group ID
 UID = 1000
 GID = 1000
+
+# Jupyter Lab port
+# JUPYTER_PORT = 8888
 ```
 
 | Variable | Description | Default |
@@ -78,9 +81,15 @@ GID = 1000
 | `PROJECT_NAME` | Container name prefix | `MySuperProject` |
 | `CONTAINER_DISPLAY` | X11 display for GUI | `:1` |
 | `DEBUG_PORT` | Remote debugging port | `5678` |
+| `JUPYTER_PORT` | Jupyter lab port | `8888` |
 | `DATASET` | Path to dataset directory | `/path/to/dataset` |
 | `UID` | User ID | `1000` |
 | `GID` | Group ID | `1000` |
+
+Note: You will need to run `jupyter lab --ip=0.0.0.0 --port=8888 --no-browser
+ --ServerApp.token='' --ServerApp.password='' &` from within the container
+ to start jupyter lab, and then you will be able to
+ access via `http://localhost:8888/lab`
 
 ### 4. Add Dependencies
 

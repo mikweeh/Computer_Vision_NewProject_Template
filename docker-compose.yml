@@ -23,6 +23,7 @@ services:
     
     ports:
       - "${DEBUG_PORT:-5678}:5678"
+      - "${JUPYTER_PORT:-8888}:8888"
     
     volumes:
       - .:/home/rosuser/repo:rw
